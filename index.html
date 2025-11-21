@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online SQL Simulator</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="lib/alasql.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>🐘 Online SQL Simulator</h1>
+            <p class="subtitle">Learn SQL with a friendly, interactive environment!</p>
+        </header>
+
+        <!-- Start Guide Section -->
+        <section class="guide-section">
+            <button class="toggle-btn" onclick="toggleGuide()">
+                📚 Show/Hide Start Guide & Common Commands
+            </button>
+            <div id="guideContent" class="guide-content">
+                <div class="guide-columns">
+                    <div class="guide-column">
+                        <h2>🚀 Getting Started</h2>
+                        <ol>
+                            <li><strong>Create a table:</strong> Use CREATE TABLE to make a new table</li>
+                            <li><strong>Insert data:</strong> Use INSERT INTO to add rows</li>
+                            <li><strong>Query data:</strong> Use SELECT to view your data</li>
+                            <li><strong>Upload files:</strong> Import SQL files (max 20MB)</li>
+                        </ol>
+                        
+                        <h3>💡 Tips for Beginners:</h3>
+                        <ul>
+                            <li>SQL statements end with a semicolon (;)</li>
+                            <li>Keywords like SELECT, FROM are not case-sensitive</li>
+                            <li>Use single quotes for text values: 'text'</li>
+                            <li>Click any example command to try it!</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="guide-column">
+                        <h2>📝 Common Commands</h2>
+                        
+                        <h3>Creating Tables:</h3>
+                        <div class="command-box" onclick="insertCommand(this.textContent)">
+CREATE TABLE students (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name VARCHAR(100),
+    age INTEGER,
+    grade DECIMAL(3,2)
+);</div>
+
+                        <h3>Inserting Data:</h3>
+                        <div class="command-box" onclick="insertCommand(this.textContent)">
+INSERT INTO students (name, age, grade)
+VALUES ('Alice', 15, 95.5);</div>
+
+                        <h3>Selecting Data:</h3>
+                        <div class="command-box" onclick="insertCommand(this.textContent)">
+SELECT * FROM students;</div>
+
+                        <div class="command-box" onclick="insertCommand(this.textContent)">
+SELECT name, grade FROM students WHERE age > 14;</div>
+
+                        <h3>Creating Indexes:</h3>
+                        <div class="command-box" onclick="insertCommand(this.textContent)">
+CREATE INDEX idx_student_name ON students(name);</div>
+
+                        <h3>Updating Data:</h3>
+                        <div class="command-box" onclick="insertCommand(this.textContent)">
+UPDATE students SET grade = 98.0 WHERE name = 'Alice';</div>
+
+                        <h3>Deleting Data:</h3>
+                        <div class="command-box" onclick="insertCommand(this.textContent)">
+DELETE FROM students WHERE age < 14;</div>
+
+                        <h3>Joining Tables:</h3>
+                        <div class="command-box" onclick="insertCommand(this.textContent)">
+SELECT students.name, courses.title
+FROM students
+JOIN enrollments ON students.id = enrollments.student_id
+JOIN courses ON enrollments.course_id = courses.id;</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- File Upload Section -->
+        <section class="upload-section">
+            <h2>📁 Import SQL File</h2>
+            <div class="upload-controls">
+                <input type="file" id="fileInput" accept=".sql,.txt" onchange="handleFileUpload(event)">
+                <label for="fileInput" class="file-label">Choose SQL File (Max 20MB)</label>
+                <span id="fileName" class="file-name"></span>
+            </div>
+            <div id="uploadStatus" class="status-message"></div>
+        </section>
+
+        <!-- SQL Editor Section -->
+        <section class="editor-section">
+            <h2>✏️ SQL Editor</h2>
+            <textarea id="sqlEditor" placeholder="Type your SQL commands here...
+
+Try this example:
+CREATE TABLE users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    username VARCHAR(50),
+    email VARCHAR(100)
+);
+
+INSERT INTO users (username, email) VALUES ('john_doe', 'john@example.com');
+SELECT * FROM users;"></textarea>
+            
+            <div class="editor-controls">
+                <button class="btn btn-primary" onclick="executeSQL()">▶️ Run Query</button>
+                <button class="btn btn-secondary" onclick="clearEditor()">🗑️ Clear</button>
+                <button class="btn btn-secondary" onclick="resetDatabase()">🔄 Reset Database</button>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section class="results-section">
+            <h2>📊 Results</h2>
+            <div id="results" class="results-container">
+                <p class="placeholder">Results will appear here after running a query...</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Made with ❤️ for SQL learners | Powered by AlaSQL (JavaScript SQL Database)</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
