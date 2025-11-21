@@ -214,8 +214,9 @@ window.resetDatabase = function() {
             const tables = alasql('SHOW TABLES');
             tables.forEach(table => {
                 const tableName = table.tableid;
-                // Sanitize table name to prevent SQL injection - only allow alphanumeric and underscores
-                if (/^[a-zA-Z0-9_]+$/.test(tableName)) {
+                // Sanitize table name to prevent SQL injection - only allow valid SQL identifiers
+                // Table names must start with a letter and contain only alphanumeric and underscores
+                if (/^[a-zA-Z][a-zA-Z0-9_]*$/.test(tableName)) {
                     alasql(`DROP TABLE IF EXISTS ${tableName}`);
                 }
             });
@@ -237,7 +238,12 @@ function escapeHtml(text) {
 // Helper function to show messages
 function showMessage(message, type) {
     const resultsDiv = document.getElementById('results');
-    const className = type === 'success' ? 'result-success' : type === 'error' ? 'result-error' : 'result-info';
+    const classMap = {
+        'success': 'result-success',
+        'error': 'result-error',
+        'info': 'result-info'
+    };
+    const className = classMap[type] || 'result-info';
     resultsDiv.innerHTML = `<div class="result-message ${className}">${escapeHtml(message)}</div>`;
 }
 
