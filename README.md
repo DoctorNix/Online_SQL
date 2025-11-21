@@ -4,7 +4,7 @@ An interactive, beginner-friendly SQL simulator that runs entirely in your brows
 
 ## ✨ Features
 
-- **🌐 Browser-Based**: No installation required - runs completely in your browser using SQLite WebAssembly (SQL.js)
+- **🌐 Browser-Based**: No installation required - runs completely in your browser using AlaSQL (JavaScript SQL database)
 - **📁 File Upload**: Import SQL files up to 20MB in size
 - **🔍 Full SQL Support**: 
   - CREATE, ALTER, DROP tables

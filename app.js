@@ -214,7 +214,10 @@ window.resetDatabase = function() {
             const tables = alasql('SHOW TABLES');
             tables.forEach(table => {
                 const tableName = table.tableid;
-                alasql(`DROP TABLE IF EXISTS ${tableName}`);
+                // Sanitize table name to prevent SQL injection - only allow alphanumeric and underscores
+                if (/^[a-zA-Z0-9_]+$/.test(tableName)) {
+                    alasql(`DROP TABLE IF EXISTS ${tableName}`);
+                }
             });
             
             resultsDiv.innerHTML = '<div class="result-message result-success">✅ Database reset successfully!</div>';
