@@ -1,12 +1,12 @@
-# 🐘 Online PostgreSQL Simulator
+# 🐘 Online SQL Simulator
 
-An interactive, beginner-friendly PostgreSQL simulator that runs entirely in your browser! Perfect for learning SQL, testing queries, and teaching children database concepts.
+An interactive, beginner-friendly SQL simulator that runs entirely in your browser! Perfect for learning SQL, testing queries, and teaching children database concepts.
 
 ## ✨ Features
 
-- **🌐 Browser-Based**: No installation required - runs completely in your browser using PostgreSQL WebAssembly (PGlite)
+- **🌐 Browser-Based**: No installation required - runs completely in your browser using SQLite WebAssembly (SQL.js)
 - **📁 File Upload**: Import SQL files up to 20MB in size
-- **🔍 Full PostgreSQL Support**: 
+- **🔍 Full SQL Support**: 
   - CREATE, ALTER, DROP tables
   - INSERT, UPDATE, DELETE operations
   - SELECT queries with WHERE, JOIN, ORDER BY, GROUP BY
@@ -52,7 +52,7 @@ An interactive, beginner-friendly PostgreSQL simulator that runs entirely in you
 ```sql
 -- Create a table
 CREATE TABLE students (
-    id SERIAL PRIMARY KEY,
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
     name VARCHAR(100),
     age INTEGER,
     grade DECIMAL(3,2)
@@ -88,23 +88,24 @@ CREATE INDEX idx_name ON table_name(column_name);
 CREATE UNIQUE INDEX idx_email ON users(email);
 ```
 
-### PostgreSQL Features
-This simulator supports standard PostgreSQL syntax including:
-- Data types: INTEGER, VARCHAR, TEXT, DECIMAL, BOOLEAN, DATE, TIMESTAMP
+### SQL Features
+This simulator supports standard SQL syntax including:
+- Data types: INTEGER, VARCHAR, TEXT, REAL, BLOB, DATE, DATETIME
 - Constraints: PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL, CHECK
 - Indexes: CREATE INDEX, CREATE UNIQUE INDEX
-- Joins: INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN
+- Joins: INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL OUTER JOIN, CROSS JOIN
 - Aggregations: COUNT, SUM, AVG, MIN, MAX
 - Grouping: GROUP BY, HAVING
 - Sorting: ORDER BY
+- Subqueries and Common Table Expressions (CTEs)
 - And much more!
 
 ## 🛠️ Technical Details
 
-- **Engine**: [PGlite](https://github.com/electric-sql/pglite) - PostgreSQL compiled to WebAssembly
+- **Engine**: [AlaSQL](https://github.com/AlaSQL/alasql) - JavaScript SQL database library
 - **No Backend Required**: Everything runs in the browser
-- **Local Storage**: Data persists during your session (reset clears everything)
-- **Modern Browsers**: Requires WebAssembly support (Chrome 57+, Firefox 52+, Safari 11+, Edge 16+)
+- **Session Storage**: Data persists during your session (reset clears everything)
+- **Modern Browsers**: Works in all modern browsers (Chrome, Firefox, Safari, Edge)
 
 ## 👨‍👩‍👧‍👦 Perfect for Learning
 
@@ -129,7 +130,7 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENS
 
 ## 🙏 Acknowledgments
 
-- Built with [PGlite](https://github.com/electric-sql/pglite) by ElectricSQL
+- Built with [AlaSQL](https://github.com/AlaSQL/alasql) - JavaScript SQL database
 - Inspired by the need for accessible SQL learning tools
 
 ---

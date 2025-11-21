@@ -1,11 +1,11 @@
--- Sample SQL File for Testing the Online PostgreSQL Simulator
+-- Sample SQL File for Testing the Online SQL Simulator
 -- This file demonstrates various SQL features including tables, indexes, and queries
 
 -- Create a database schema for a simple library system
 
 -- Create Books table
 CREATE TABLE books (
-    book_id SERIAL PRIMARY KEY,
+    book_id INTEGER PRIMARY KEY AUTOINCREMENT,
     title VARCHAR(200) NOT NULL,
     author VARCHAR(100) NOT NULL,
     isbn VARCHAR(13) UNIQUE,
@@ -16,7 +16,7 @@ CREATE TABLE books (
 
 -- Create Members table
 CREATE TABLE members (
-    member_id SERIAL PRIMARY KEY,
+    member_id INTEGER PRIMARY KEY AUTOINCREMENT,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE members (
 
 -- Create Loans table
 CREATE TABLE loans (
-    loan_id SERIAL PRIMARY KEY,
+    loan_id INTEGER PRIMARY KEY AUTOINCREMENT,
     book_id INTEGER REFERENCES books(book_id),
     member_id INTEGER REFERENCES members(member_id),
     loan_date DATE DEFAULT CURRENT_DATE,

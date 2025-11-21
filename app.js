@@ -1,15 +1,11 @@
-// Import PGlite from CDN
-import { PGlite } from 'https://cdn.jsdelivr.net/npm/@electric-sql/pglite/dist/index.js';
-
-// Initialize PGlite database
-let db;
+// Initialize AlaSQL database
 const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB in bytes
 
 // Initialize database on page load
-async function initDatabase() {
+function initDatabase() {
     try {
-        db = new PGlite();
-        console.log('PostgreSQL database initialized successfully');
+        // AlaSQL is ready to use immediately
+        console.log('SQL database initialized successfully');
         showMessage('Database ready! 🎉', 'success');
     } catch (error) {
         console.error('Failed to initialize database:', error);
@@ -71,7 +67,7 @@ window.handleFileUpload = async function(event) {
 };
 
 // Execute SQL
-window.executeSQL = async function() {
+window.executeSQL = function() {
     const editor = document.getElementById('sqlEditor');
     const resultsDiv = document.getElementById('results');
     const sql = editor.value.trim();
@@ -94,7 +90,7 @@ window.executeSQL = async function() {
             if (!statement) continue;
             
             try {
-                const result = await db.query(statement);
+                const result = alasql(statement);
                 allResults.push({
                     statement: statement,
                     result: result,
@@ -137,27 +133,27 @@ function displayResults(results) {
         
         const result = item.result;
         
-        // For SELECT queries, show the data
-        if (result.rows && result.rows.length > 0) {
+        // Check if there are results (SELECT queries return array)
+        if (Array.isArray(result) && result.length > 0) {
             html += `
                 <div class="result-message result-success">
                     <strong>✅ Statement ${i + 1} executed successfully:</strong><br>
                     <code>${escapeHtml(item.statement)}</code><br>
-                    <strong>Rows returned:</strong> ${result.rows.length}
+                    <strong>Rows returned:</strong> ${result.length}
                 </div>
             `;
-            html += createTable(result.rows, result.fields);
-        } else if (result.affectedRows !== undefined) {
-            // For INSERT, UPDATE, DELETE
+            html += createTable(result);
+        } else if (Array.isArray(result) && result.length === 0) {
+            // Empty result set
             html += `
                 <div class="result-message result-success">
                     <strong>✅ Statement ${i + 1} executed successfully:</strong><br>
                     <code>${escapeHtml(item.statement)}</code><br>
-                    <strong>Rows affected:</strong> ${result.affectedRows}
+                    <strong>Rows returned:</strong> 0
                 </div>
             `;
         } else {
-            // For CREATE, DROP, ALTER, etc.
+            // For CREATE, INSERT, UPDATE, DELETE, etc.
             html += `
                 <div class="result-message result-success">
                     <strong>✅ Statement ${i + 1} executed successfully:</strong><br>
@@ -171,12 +167,13 @@ function displayResults(results) {
 }
 
 // Create HTML table from results
-function createTable(rows, fields) {
-    if (rows.length === 0) {
+function createTable(result) {
+    if (!result || result.length === 0) {
         return '<p>No rows returned.</p>';
     }
     
-    const columns = fields.map(f => f.name);
+    // Get column names from first row
+    const columns = Object.keys(result[0]);
     
     let html = '<table><thead><tr>';
     columns.forEach(col => {
@@ -184,11 +181,11 @@ function createTable(rows, fields) {
     });
     html += '</tr></thead><tbody>';
     
-    rows.forEach(row => {
+    result.forEach(row => {
         html += '<tr>';
         columns.forEach(col => {
             const value = row[col];
-            html += `<td>${value === null ? '<em>NULL</em>' : escapeHtml(String(value))}</td>`;
+            html += `<td>${value === null || value === undefined ? '<em>NULL</em>' : escapeHtml(String(value))}</td>`;
         });
         html += '</tr>';
     });
@@ -207,15 +204,19 @@ window.clearEditor = function() {
 };
 
 // Reset database
-window.resetDatabase = async function() {
+window.resetDatabase = function() {
     if (confirm('Are you sure you want to reset the database? All data will be lost!')) {
         const resultsDiv = document.getElementById('results');
         resultsDiv.innerHTML = '<div class="result-message result-info">⏳ Resetting database... <span class="loading"></span></div>';
         
         try {
-            // Close and reinitialize database
-            await db.close();
-            await initDatabase();
+            // Get all table names and drop them
+            const tables = alasql('SHOW TABLES');
+            tables.forEach(table => {
+                const tableName = table.tableid;
+                alasql(`DROP TABLE IF EXISTS ${tableName}`);
+            });
+            
             resultsDiv.innerHTML = '<div class="result-message result-success">✅ Database reset successfully!</div>';
         } catch (error) {
             resultsDiv.innerHTML = `<div class="result-message result-error">❌ Error resetting database: ${escapeHtml(error.message)}</div>`;

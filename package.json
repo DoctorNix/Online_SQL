@@ -1,0 +1,18 @@
+{
+  "name": "online_sql",
+  "version": "1.0.0",
+  "description": "An interactive, beginner-friendly SQL simulator that runs entirely in your browser! Perfect for learning SQL, testing queries, and teaching children database concepts.",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "alasql": "^4.10.1"
+  }
+}
